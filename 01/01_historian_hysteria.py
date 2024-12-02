@@ -37,7 +37,7 @@ def similarity_score(left_list: list, right_list: list):
 
 
 if __name__ == "__main__":
-    left_list, right_list = load_data("day1_data.txt")
+    left_list, right_list = load_data("01_data.txt")
     # find total distance between the left and right lists
     total_distance = find_total_distance(left_list, right_list)
     print(f"total distance: {total_distance}")
