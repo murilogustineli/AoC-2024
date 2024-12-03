@@ -25,23 +25,42 @@ def parse_data(data: list):
     return final_data
 
 
-def check_safe_levels(data: list):
+def check_safe_levels(data: list, problem_dampener: bool = False):
     # check if all levels are safe
     safe_levels = 0
     for report in data:
         # check if all levels are either all increasing or all decreasing
         # any two adjacent levels differ by at least one and at most three
         # check if all levels are increasing
-        if all([1 <= report[i] - report[i - 1] <= 3 for i in range(1, len(report))]):
-            safe_levels += 1
+        increasing = [
+            1 <= report[i] - report[i - 1] <= 3 for i in range(1, len(report))
+        ]
         # check if all levels are decreasing
-        elif all([1 <= report[i - 1] - report[i] <= 3 for i in range(1, len(report))]):
+        decreasing = [
+            1 <= report[i - 1] - report[i] <= 3 for i in range(1, len(report))
+        ]
+        if problem_dampener:
+            if (
+                sum(increasing) == len(increasing) - 1
+                or sum(decreasing) == len(decreasing) - 1
+            ):
+                safe_levels += 1
+                print(f"safe: {report}")
+                continue
+        if all(increasing) or all(decreasing):
             safe_levels += 1
+            print(f"safe: {report}")
+        else:
+            print(f"unsafe: {report}")
     return safe_levels
 
 
 if __name__ == "__main__":
+    # Part One
     data = load_data(file_path="data_02.txt")
-    parsed_data = parse_data(data)
-    safe_levels = check_safe_levels(parsed_data)
-    print(f"safe levels: {safe_levels}")
+    parsed_data = parse_data(data[:10])
+    # safe_levels = check_safe_levels(parsed_data)
+    # print(f"safe levels: {safe_levels}")
+    # Par Two
+    safe_levels = check_safe_levels(parsed_data, problem_dampener=True)
+    print(f"safe levels problem dampener: {safe_levels}")
