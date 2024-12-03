@@ -25,42 +25,52 @@ def parse_data(data: list):
     return final_data
 
 
-def check_safe_levels(data: list, problem_dampener: bool = False):
-    # check if all levels are safe
-    safe_levels = 0
-    for report in data:
-        # check if all levels are either all increasing or all decreasing
-        # any two adjacent levels differ by at least one and at most three
-        # check if all levels are increasing
-        increasing = [
-            1 <= report[i] - report[i - 1] <= 3 for i in range(1, len(report))
-        ]
-        # check if all levels are decreasing
-        decreasing = [
-            1 <= report[i - 1] - report[i] <= 3 for i in range(1, len(report))
-        ]
-        if problem_dampener:
-            if (
-                sum(increasing) == len(increasing) - 1
-                or sum(decreasing) == len(decreasing) - 1
-            ):
-                safe_levels += 1
-                print(f"safe: {report}")
-                continue
-        if all(increasing) or all(decreasing):
-            safe_levels += 1
-            print(f"safe: {report}")
-        else:
-            print(f"unsafe: {report}")
-    return safe_levels
+def is_safe(levels):
+    if len(levels) <= 1:
+        return True
+
+    diffs = [levels[i + 1] - levels[i] for i in range(len(levels) - 1)]
+
+    # Check for zero differences
+    if any(diff == 0 for diff in diffs):
+        return False
+
+    # Check differences are between 1 and 3 inclusive (absolute value)
+    if not all(1 <= abs(diff) <= 3 for diff in diffs):
+        return False
+
+    # Check all differences are in the same direction
+    if all(diff > 0 for diff in diffs):
+        return True
+    if all(diff < 0 for diff in diffs):
+        return True
+
+    return False
+
+
+def is_safe_with_removal(levels):
+    if is_safe(levels):
+        return True
+
+    for i in range(len(levels)):
+        new_levels = levels[:i] + levels[i + 1 :]
+        if is_safe(new_levels):
+            return True
+    return False
+
+
+def main():
+    # Part One
+    data = load_data(file_path="data_02.txt")
+    reports = parse_data(data)
+    # Part One
+    safe_reports_part1 = sum(1 for report in reports if is_safe(report))
+    print(f"\nPart One: Number of safe reports is {safe_reports_part1}")
+
+    # Part Two
+    safe_reports_part2 = sum(1 for report in reports if is_safe_with_removal(report))
+    print(f"Part Two: Number of safe reports is {safe_reports_part2}")
 
 
 if __name__ == "__main__":
-    # Part One
-    data = load_data(file_path="data_02.txt")
-    parsed_data = parse_data(data[:10])
-    # safe_levels = check_safe_levels(parsed_data)
-    # print(f"safe levels: {safe_levels}")
-    # Par Two
-    safe_levels = check_safe_levels(parsed_data, problem_dampener=True)
-    print(f"safe levels problem dampener: {safe_levels}")
+    main()
