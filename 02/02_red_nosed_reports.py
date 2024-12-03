@@ -60,7 +60,6 @@ def is_safe_with_removal(levels):
 
 
 def main():
-    # Part One
     data = load_data(file_path="data_02.txt")
     reports = parse_data(data)
     # Part One

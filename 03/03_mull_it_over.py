@@ -28,9 +28,10 @@ if __name__ == "__main__":
 
     # load data
     instructions = load_data("data_03.txt")
+
+    # Part One
     # search for mul() in the sample_instructions
     multiplications = find_multiplications(instructions)
     # multiply the two numbers in each tuple and sum the results
     result = multiply_and_sum(multiplications)
-    print(multiplications[:10])
-    print(f"result: {result}")
+    print(f"Part One: {result}")
