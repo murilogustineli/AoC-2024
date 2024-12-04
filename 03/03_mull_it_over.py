@@ -9,18 +9,9 @@ def load_data(file_path: str) -> str:
     return content
 
 
-def find_multiplications(
-    instructions: str,
-    processed_pattern: bool = False,
-) -> list:
-    # search for mul() in the sample_instructions
-    if processed_pattern:
-        string = ""
-        for i in instructions:
-            string += str(i)
-        multiplications = re.findall(r"mul\((\d+),(\d+)\)", string)
-    else:
-        multiplications = re.findall(r"mul\((\d+),(\d+)\)", instructions)
+def find_multiplications(instructions: str) -> list:
+    # search for mul() in the instructions
+    multiplications = re.findall(r"mul\((\d+),(\d+)\)", instructions)
     return multiplications
 
 
@@ -53,6 +44,15 @@ def process_matches(patterns: list) -> list:
     return processed_patterns
 
 
+def find_multiplications_part_two(patterns: list) -> list:
+    # search for mul() in the instructions
+    string = ""
+    for i in patterns:
+        string += str(i)
+    multiplications = re.findall(r"mul\((\d+),(\d+)\)", string)
+    return multiplications
+
+
 if __name__ == "__main__":
     import re
 
@@ -67,6 +67,6 @@ if __name__ == "__main__":
     # Part Two
     patterns = extract_patterns(instructions)
     processed_patterns = process_matches(patterns)
-    multiplications = find_multiplications(processed_patterns, processed_pattern=True)
+    multiplications = find_multiplications_part_two(processed_patterns)
     result = multiply_and_sum(multiplications)
     print(f"Part Two: {result}")
