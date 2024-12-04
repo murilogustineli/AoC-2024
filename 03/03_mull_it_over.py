@@ -30,7 +30,7 @@ def extract_patterns(instructions: str) -> list:
     return [p.group() for p in pattern]
 
 
-def process_matches(patterns: list) -> list:
+def process_matches(patterns: list) -> str:
     # process the matches
     mul_enabled = True
     processed_patterns = []
@@ -41,16 +41,11 @@ def process_matches(patterns: list) -> list:
             mul_enabled = True
         elif mul_enabled:
             processed_patterns.append(pattern)
-    return processed_patterns
-
-
-def find_multiplications_part_two(patterns: list) -> list:
-    # search for mul() in the instructions
-    string = ""
-    for i in patterns:
-        string += str(i)
-    multiplications = re.findall(r"mul\((\d+),(\d+)\)", string)
-    return multiplications
+    # convert the list to a string of instructions
+    instructions = ""
+    for i in processed_patterns:
+        instructions += str(i)
+    return instructions
 
 
 if __name__ == "__main__":
@@ -66,7 +61,7 @@ if __name__ == "__main__":
 
     # Part Two
     patterns = extract_patterns(instructions)
-    processed_patterns = process_matches(patterns)
-    multiplications = find_multiplications_part_two(processed_patterns)
+    instructions = process_matches(patterns)
+    multiplications = find_multiplications(instructions)
     result = multiply_and_sum(multiplications)
     print(f"Part Two: {result}")
