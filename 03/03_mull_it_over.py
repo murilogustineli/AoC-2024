@@ -1,4 +1,6 @@
-sample_instructions = "mul(48,648)mul(637,618):#?^ {/*?<mul(506,718)&:why()@]mul(910,151)who(){*@{where()#mul(624,757)>why()+mul(739,690)mul(74,266)who()%][]*}who()mul(662,558)select()>>! ?!^/"
+sample_instructions = (
+    "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))"
+)
 
 
 def load_data(file_path: str) -> str:
@@ -7,11 +9,18 @@ def load_data(file_path: str) -> str:
     return content
 
 
-def find_multiplications(instructions: str) -> list:
-    import re
-
+def find_multiplications(
+    instructions: str,
+    processed_pattern: bool = False,
+) -> list:
     # search for mul() in the sample_instructions
-    multiplications = re.findall(r"mul\((\d+),(\d+)\)", instructions)
+    if processed_pattern:
+        string = ""
+        for i in instructions:
+            string += str(i)
+        multiplications = re.findall(r"mul\((\d+),(\d+)\)", string)
+    else:
+        multiplications = re.findall(r"mul\((\d+),(\d+)\)", instructions)
     return multiplications
 
 
@@ -23,6 +32,27 @@ def multiply_and_sum(multiplications: list) -> int:
     return result
 
 
+def extract_patterns(instructions: str) -> list:
+    # search for mul(), do() and dont() in the sample_instructions
+    mul_pattern = r"mul\(\d+,\d+\)|do\(\)|don'?t\(\)"
+    pattern = re.finditer(mul_pattern, instructions)
+    return [p.group() for p in pattern]
+
+
+def process_matches(patterns: list) -> list:
+    # process the matches
+    mul_enabled = True
+    processed_patterns = []
+    for pattern in patterns:
+        if pattern == "don't()":
+            mul_enabled = False
+        elif pattern == "do()":
+            mul_enabled = True
+        elif mul_enabled:
+            processed_patterns.append(pattern)
+    return processed_patterns
+
+
 if __name__ == "__main__":
     import re
 
@@ -30,8 +60,13 @@ if __name__ == "__main__":
     instructions = load_data("data_03.txt")
 
     # Part One
-    # search for mul() in the sample_instructions
     multiplications = find_multiplications(instructions)
-    # multiply the two numbers in each tuple and sum the results
     result = multiply_and_sum(multiplications)
     print(f"Part One: {result}")
+
+    # Part Two
+    patterns = extract_patterns(instructions)
+    processed_patterns = process_matches(patterns)
+    multiplications = find_multiplications(processed_patterns, processed_pattern=True)
+    result = multiply_and_sum(multiplications)
+    print(f"Part Two: {result}")
