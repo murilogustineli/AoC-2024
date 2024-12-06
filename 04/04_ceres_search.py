@@ -3,7 +3,7 @@ https://adventofcode.com/2024/day/4
 https://www.geeksforgeeks.org/search-a-word-in-a-2d-grid-of-characters/
 """
 
-sample_data = """
+sample_data_1 = """
 MMMSXXMASM
 MSAMXMSMSA
 AMXSXMAAMM
@@ -193,7 +193,7 @@ def search2D_XMAS(grid, row: int, col: int, word: str) -> int:
                     and grid[rd + 1][cd - 1] == word[2]
                 ):
                     counter += 1
-    return counter / 2
+    return counter
 
 
 def search_grid_XMAS(
@@ -212,14 +212,14 @@ def search_grid_XMAS(
 
 if __name__ == "__main__":
     # Part One
-    sample_data = load_sample_data(sample_data)
+    sample_data = load_sample_data(sample_data_1)
     data = load_data("data_04.txt")
-    grid = make_grid(data)
+    grid = make_grid(sample_data)
     total = search_grid(grid)
     print(f"total: {total}")
 
     # Part Two
-    sample_data = load_sample_data(sample_data_3)
-    grid = make_grid(data)
+    sample_data = load_sample_data(sample_data_1)
+    grid = make_grid(sample_data)
     total = search_grid_XMAS(grid, word="MAS")
     print(f"total: {total}")
