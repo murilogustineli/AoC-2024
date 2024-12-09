@@ -219,7 +219,7 @@ if __name__ == "__main__":
     print(f"total: {total}")
 
     # Part Two
-    sample_data = load_sample_data(sample_data_1)
+    sample_data = load_sample_data(sample_data_3)
     grid = make_grid(sample_data)
     total = search_grid_XMAS(grid, word="MAS")
     print(f"total: {total}")
